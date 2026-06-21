@@ -1,0 +1,869 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CROWN — type a feeling, not a filter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
+<style>
+
+  :root{
+    --bg:#15100E; --bg-2:#1E1613; --bg-3:#241A15;
+    --surface:#221915; --surface-2:#2A1F19; --surface-3:#33251D;
+    --line:rgba(246,239,228,.10); --line-2:rgba(246,239,228,.06);
+    --gold-line:rgba(201,162,75,.34);
+    --cream:#F7F0E5; --cream-dim:#DACCBC; --taupe:#A48E7E;
+    --gold:#C9A24B; --gold-2:#E4CB8C; --gold-deep:#A47C2E;
+    --gold-glow:rgba(201,162,75,.22);
+    --signal:#d95c44; --signal-2:#e8795f; --signal-glow:rgba(217,92,68,.30); /* LIVE SCORES ONLY */
+    --shadow:0 30px 90px rgba(0,0,0,.46);
+    --r-xl:26px; --r-lg:20px; --r-md:15px; --r-sm:10px;
+    --display:"Fraunces",Georgia,serif;
+    --body:"General Sans",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{
+    min-height:100vh;font-family:var(--body);color:var(--cream);
+    background:
+      radial-gradient(120% 90% at 82% -8%, rgba(201,162,75,.16), transparent 46%),
+      radial-gradient(120% 80% at 8% 4%, rgba(217,92,68,.08), transparent 40%),
+      linear-gradient(180deg,var(--bg-2),var(--bg) 38%);
+    background-attachment:fixed;-webkit-font-smoothing:antialiased;
+    line-height:1.5;letter-spacing:.002em;overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  ::selection{background:rgba(201,162,75,.30);color:#fff}
+
+  .shell{max-width:1160px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(18px,4vw,40px) 80px}
+
+  /* eyebrow / kicker system — a true content label, gold + mono */
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.26em;
+    text-transform:uppercase;color:var(--gold);display:inline-flex;align-items:center;gap:10px}
+  .kicker::before{content:"";width:22px;height:1px;background:var(--gold-line)}
+
+  /* ── topbar ── */
+  .topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;
+    padding-bottom:22px;border-bottom:1px solid var(--gold-line);margin-bottom:clamp(36px,7vw,72px)}
+  .brand-stack{display:flex;flex-direction:column;gap:6px}
+  .wordmark{font-family:var(--display);font-optical-sizing:auto;font-weight:600;
+    font-size:clamp(26px,4vw,34px);letter-spacing:.30em;color:var(--cream);
+    text-indent:.30em;line-height:1}
+  .subtitle{font-family:var(--mono);font-size:11px;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--taupe)}
+  .pill-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+  .pill{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--cream-dim);border:1px solid var(--gold-line);border-radius:999px;
+    padding:7px 13px;background:rgba(201,162,75,.05)}
+
+  /* ── intro ── */
+  .intro{display:grid;grid-template-columns:1.5fr .95fr;gap:clamp(28px,5vw,64px);
+    align-items:end;margin-bottom:clamp(34px,6vw,60px)}
+  .hero-copy h1{font-family:var(--display);font-optical-sizing:auto;font-weight:380;
+    font-size:clamp(46px,8.2vw,104px);line-height:.96;letter-spacing:-.018em;color:var(--cream);
+    text-wrap:balance}
+  .hero-copy h1 em{font-style:italic;font-weight:420;
+    background:linear-gradient(96deg,var(--gold-2),var(--gold) 55%,var(--gold-deep));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .hero-copy p{margin-top:24px;max-width:52ch;font-size:clamp(15px,1.4vw,17px);
+    color:var(--cream-dim);line-height:1.62}
+
+  .info-card{background:linear-gradient(180deg,var(--surface-2),var(--surface));
+    border:1px solid var(--line);border-top:1px solid var(--gold-line);
+    border-radius:var(--r-lg);padding:24px 24px 22px;box-shadow:var(--shadow)}
+  .info-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+  .info-card h2{font-family:var(--display);font-weight:380;font-size:23px;
+    line-height:1.12;color:var(--cream);margin-bottom:18px;letter-spacing:-.01em}
+  .info-grid{display:flex;flex-direction:column;gap:14px}
+  .info-item{display:flex;flex-direction:column;gap:3px;padding-top:14px;border-top:1px solid var(--line-2)}
+  .info-item:first-child{border-top:0;padding-top:0}
+  .info-item strong{font-weight:600;font-size:14px;color:var(--cream)}
+  .info-item span{font-size:13px;color:var(--taupe);line-height:1.5}
+
+  /* ── composer ── */
+  .composer{margin-bottom:clamp(40px,7vw,80px)}
+  .field-panel{display:flex;gap:12px;align-items:center;padding:12px 12px 12px 22px;
+    background:linear-gradient(180deg,var(--surface-2),var(--surface));
+    border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow);
+    transition:border-color .25s ease, box-shadow .25s ease}
+  .field-panel:focus-within{border-color:var(--gold-line);
+    box-shadow:var(--shadow),0 0 0 4px var(--gold-glow)}
+  #q{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--cream);
+    font-family:var(--display);font-weight:340;font-size:clamp(19px,2.4vw,27px);
+    letter-spacing:-.01em}
+  #q::placeholder{color:var(--taupe);font-style:italic;opacity:.85}
+  #go{flex:none;font-family:var(--body);font-weight:600;font-size:14px;letter-spacing:.02em;
+    color:#1a1208;cursor:pointer;border:0;border-radius:999px;padding:15px 26px;
+    background:linear-gradient(180deg,var(--gold-2),var(--gold) 58%,var(--gold-deep));
+    box-shadow:0 8px 24px rgba(201,162,75,.30);transition:transform .18s ease, filter .18s ease}
+  #go:hover{transform:translateY(-1px);filter:brightness(1.06)}
+  #go:active{transform:translateY(0)}
+  #go:disabled{opacity:.5;cursor:default;transform:none;filter:none}
+
+  .seed-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
+  .chip{font-family:var(--mono);font-size:12px;letter-spacing:.01em;color:var(--cream-dim);
+    background:rgba(201,162,75,.04);border:1px solid var(--gold-line);border-radius:999px;
+    padding:8px 14px;cursor:pointer;transition:color .2s, background .2s, transform .2s}
+  .chip:hover{color:#1a1208;background:linear-gradient(180deg,var(--gold-2),var(--gold));
+    border-color:transparent;transform:translateY(-1px)}
+  .catalog-note{margin-top:16px;font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;
+    color:var(--taupe)}
+  .catalog-note.err{color:var(--signal-2)}
+
+  /* ── results ── */
+  .results{margin-top:8px}
+  .results-shell{display:flex;flex-direction:column;gap:26px}
+  .results-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+    flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--gold-line)}
+  .query-stack{display:grid;gap:8px}
+  .query-label{font-family:var(--mono);font-size:11px;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--gold)}
+  .said{font-family:var(--display);font-style:italic;font-weight:360;
+    font-size:clamp(26px,4vw,42px);line-height:1.05;color:var(--cream);letter-spacing:-.01em}
+  .metrics{display:flex;gap:26px;flex-wrap:wrap}
+  .metric{display:flex;flex-direction:column;gap:3px;text-align:right}
+  .metric .k{font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--taupe)}
+  .metric .v{font-family:var(--mono);font-size:20px;font-weight:500;color:var(--signal)} /* live */
+
+  .status{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--taupe)}
+  .status.err{color:var(--signal-2)}
+
+  /* hero best-match — the crowned look, radiant gold aura */
+  .hero-wrap{position:relative}
+  .hero-card{position:relative;display:grid;grid-template-columns:1.05fr 1fr;gap:0;
+    background:linear-gradient(180deg,var(--surface-2),var(--surface));
+    border:1px solid var(--gold-line);border-radius:var(--r-xl);overflow:hidden;
+    box-shadow:var(--shadow)}
+  .hero-card::before{content:"";position:absolute;inset:-2px;z-index:-1;border-radius:calc(var(--r-xl) + 4px);
+    background:radial-gradient(60% 70% at 30% 0%, var(--gold-glow), transparent 70%);
+    filter:blur(8px)}
+  .hero-visual{display:block;position:relative;min-height:380px;background:#0f0b09}
+  .hero-meta{padding:clamp(24px,3vw,38px);display:flex;flex-direction:column;gap:16px;justify-content:center}
+  .eyebrow-row{display:flex;gap:8px;flex-wrap:wrap}
+  .eyebadge{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--gold);border:1px solid var(--gold-line);border-radius:999px;padding:5px 11px;
+    background:rgba(201,162,75,.06)}
+  .eyebadge:first-child{color:#1a1208;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:transparent}
+  .hero-name{font-family:var(--display);font-weight:400;font-size:clamp(24px,2.6vw,33px);
+    line-height:1.08;letter-spacing:-.012em;color:var(--cream)}
+  .hero-name a:hover{color:var(--gold-2)}
+  .meta-stack{display:flex;flex-direction:column;gap:6px}
+  .spec{font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--cream-dim)}
+  .source{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--taupe)}
+  .hero-copytext{font-size:14px;line-height:1.6;color:var(--cream-dim);
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .hero-footer{display:flex;flex-direction:column;gap:14px;margin-top:4px}
+  .hero-actions{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .cta{font-family:var(--body);font-weight:600;font-size:13px;color:#1a1208;
+    background:linear-gradient(180deg,var(--gold-2),var(--gold) 60%,var(--gold-deep));
+    border-radius:999px;padding:12px 22px;box-shadow:0 8px 22px rgba(201,162,75,.26);
+    transition:transform .18s ease,filter .18s ease}
+  .cta:hover{transform:translateY(-1px);filter:brightness(1.06)}
+  .lead-gap{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--signal)} /* live */
+
+  /* ── gallery ── */
+  .gallery-zone{display:flex;flex-direction:column;gap:18px}
+  .gallery-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .section-title{font-family:var(--display);font-weight:380;font-size:clamp(20px,2.2vw,26px);
+    color:var(--cream);letter-spacing:-.01em}
+  .section-note{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--taupe)}
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:18px}
+  .gallery-card{display:flex;flex-direction:column;background:linear-gradient(180deg,var(--surface-2),var(--surface));
+    border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;
+    opacity:0;transform:translateY(14px);animation:rise .5s cubic-bezier(.2,.7,.2,1) forwards;
+    transition:transform .26s ease,border-color .26s ease,box-shadow .26s ease}
+  .gallery-card:hover{transform:translateY(-4px);border-color:var(--gold-line);
+    box-shadow:0 24px 60px rgba(0,0,0,.4)}
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+  .card-visual{display:block;position:relative}
+  .card-body{display:flex;flex-direction:column;gap:8px;padding:16px}
+  .card-name{font-family:var(--display);font-weight:400;font-size:16.5px;line-height:1.18;
+    letter-spacing:-.008em;color:var(--cream)}
+  .card-name a:hover{color:var(--gold-2)}
+  .card-copy{font-size:12.5px;line-height:1.5;color:var(--taupe);
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card-foot{display:flex;flex-direction:column;gap:10px;margin-top:2px}
+  .price-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .shop-link{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--gold);border-bottom:1px solid var(--gold-line);padding-bottom:1px}
+  .shop-link:hover{color:var(--gold-2)}
+
+  /* image frames + live score badge (terracotta = engine output) */
+  .shot{position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;display:block}
+  .hero-visual .shot{height:100%;aspect-ratio:auto}
+  .shot img{width:100%;height:100%;object-fit:cover;display:block;
+    transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+  .gallery-card:hover .shot img{transform:scale(1.04)}
+  .shot.image-missing{display:flex;align-items:center;justify-content:center}
+  .shot.image-missing::after{content:"image unavailable";font-family:var(--mono);font-size:10px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--taupe)}
+  .score-badge{position:absolute;top:12px;left:12px;font-family:var(--mono);font-weight:500;
+    font-size:13px;letter-spacing:.02em;color:#fff;padding:6px 11px;border-radius:999px;
+    background:linear-gradient(180deg,var(--signal-2),var(--signal));
+    box-shadow:0 6px 18px var(--signal-glow);backdrop-filter:saturate(1.2)}
+
+  .bar{height:3px;border-radius:999px;background:rgba(246,239,228,.10);overflow:hidden}
+  .bar > i{display:block;height:100%;width:6%;border-radius:999px;
+    background:linear-gradient(90deg,var(--signal),var(--signal-2));
+    transition:width 1s cubic-bezier(.2,.7,.2,1)} /* live score fill */
+
+  /* ── footer ── */
+  footer{margin-top:clamp(56px,9vw,96px);padding-top:22px;border-top:1px solid var(--gold-line);
+    display:flex;align-items:baseline;justify-content:space-between;gap:18px;flex-wrap:wrap}
+  .thesis{font-family:var(--display);font-style:italic;font-weight:360;font-size:clamp(18px,2.2vw,24px);color:var(--cream)}
+  .src{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--taupe)}
+
+  /* focus + responsive + motion */
+  a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--gold-2);outline-offset:3px;border-radius:6px}
+  @media (max-width:880px){
+    .intro{grid-template-columns:1fr;align-items:start}
+    .hero-card{grid-template-columns:1fr}
+    .hero-visual{min-height:0}
+    .hero-visual .shot{aspect-ratio:4/5;height:auto}
+    .results-head{align-items:flex-start}
+    .metric{text-align:left}
+  }
+  @media (max-width:560px){
+    .topbar{flex-direction:column;align-items:flex-start;gap:14px}
+    .pill-row{justify-content:flex-start}
+    .field-panel{flex-direction:column;align-items:stretch;border-radius:var(--r-lg);padding:16px}
+    #q{padding:6px 4px}
+    #go{width:100%;justify-content:center}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .gallery-card{opacity:1;transform:none}
+  }
+
+</style>
+</head>
+<body>
+
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand-stack">
+        <div class="wordmark">CROWN</div>
+        <div class="subtitle">Semantic hair discovery</div>
+      </div>
+      <div class="pill-row">
+        <div class="pill">Live catalogs</div>
+        <div class="pill">ARBITER coherence</div>
+      </div>
+    </header>
+
+    <section class="intro">
+      <div class="hero-copy">
+        <h1>Type a feeling.<br /><em>Not a filter.</em></h1>
+        <p>Name the energy you want to walk in. CROWN reads real looks from live catalogs through ARBITER and ranks them by meaning — the strongest match crowned up top, the rest of the field right behind it.</p>
+      </div>
+
+      <aside class="info-card">
+        <div class="info-kicker">How it reads</div>
+        <h2>Meaning first. No dropdowns.</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <strong>Real inventory</strong>
+            <span>Live product images and details pulled straight from public catalog feeds.</span>
+          </div>
+          <div class="info-item">
+            <strong>Ranked by coherence</strong>
+            <span>Your words go into ARBITER, not brittle filter logic — looks are scored on how strongly they carry the feeling.</span>
+          </div>
+          <div class="info-item">
+            <strong>A field, not a list</strong>
+            <span>One crowned match up front, then a tight editorial grid of everything close behind.</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="composer">
+      <div class="field-panel">
+        <input id="q" type="text" autocomplete="off" spellcheck="false" placeholder="i wanna feel like Rihanna" aria-label="Describe the feeling you want" />
+        <button id="go" type="button">Crown me</button>
+      </div>
+      <div class="seed-row" id="chips"></div>
+      <div class="catalog-note" id="catalogNote">loading live product catalog…</div>
+    </section>
+
+    <section class="results" id="results" hidden aria-live="polite">
+      <div class="results-shell">
+        <div class="results-head">
+          <div class="query-stack">
+            <div class="query-label">You said</div>
+            <div class="said" id="said"></div>
+          </div>
+          <div class="metrics" id="metrics"></div>
+        </div>
+
+        <div class="status" id="status"></div>
+
+        <div class="hero-wrap" id="hero"></div>
+
+        <div class="gallery-zone">
+          <div class="gallery-head">
+            <div class="section-title">The rest of the field</div>
+            <div class="section-note">Ranked live by coherence</div>
+          </div>
+          <div class="gallery" id="gallery"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="thesis">Felt, then found.</div>
+      <div class="src">Live catalog images · ARBITER coherence</div>
+    </footer>
+  </main>
+
+<script>
+(function () {
+  "use strict";
+
+  var API = "https://api.arbiter.traut.ai/public/compare";
+  var API_FALLBACK = "https://api.arbiter.traut.ai/public/compare";
+  var CANDIDATE_LIMIT = 96;
+
+  var PRODUCT_SOURCES = [
+    { label: "Luvme Hair", home: "https://shop.luvmehair.com", feed: "https://shop.luvmehair.com/products.json?limit=250" },
+    { label: "UNice", home: "https://www.unice.com", feed: "https://www.unice.com/products.json?limit=250" },
+    { label: "Isee Hair", home: "https://www.iseehair.com", feed: "https://www.iseehair.com/products.json?limit=250" },
+    { label: "Klaiyi Hair", home: "https://www.klaiyihair.com", feed: "https://www.klaiyihair.com/products.json?limit=250" },
+    { label: "Ywigs", home: "https://www.ywigs.com", feed: "https://www.ywigs.com/products.json?limit=250" },
+    { label: "Wig Studio 1", home: "https://www.wigstudio1.com", feed: "https://www.wigstudio1.com/products.json?limit=250" }
+  ];
+
+  var SEEDS = [
+    "i wanna feel like Rihanna",
+    "my villain era",
+    "boardroom but soft",
+    "clean girl but make it textured",
+    "off-duty money",
+    "untouchable at this wedding",
+    "my mom in the 90s"
+  ];
+
+  var catalog = [];
+  var catalogPromise = null;
+  var byText = {};
+
+  var qEl = document.getElementById("q");
+  var goEl = document.getElementById("go");
+  var chipsEl = document.getElementById("chips");
+  var catalogNoteEl = document.getElementById("catalogNote");
+  var resultsEl = document.getElementById("results");
+  var saidEl = document.getElementById("said");
+  var statusEl = document.getElementById("status");
+  var metricsEl = document.getElementById("metrics");
+  var heroEl = document.getElementById("hero");
+  var galleryEl = document.getElementById("gallery");
+
+  SEEDS.forEach(function (s) {
+    var b = document.createElement("button");
+    b.className = "chip";
+    b.type = "button";
+    b.textContent = s;
+    b.addEventListener("click", function () { qEl.value = s; run(); });
+    chipsEl.appendChild(b);
+  });
+
+  function escapeHTML(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function decodeHTML(value) {
+    var t = document.createElement("textarea");
+    t.innerHTML = String(value == null ? "" : value);
+    return t.value;
+  }
+
+  function cleanText(value, max) {
+    var s = String(value == null ? "" : value)
+      .replace(/<script[\s\S]*?<\/script>/gi, " ")
+      .replace(/<style[\s\S]*?<\/style>/gi, " ")
+      .replace(/<[^>]+>/g, " ");
+    s = decodeHTML(s).replace(/\s+/g, " ").trim();
+    return max && s.length > max ? s.slice(0, max).replace(/\s+\S*$/, "") + "…" : s;
+  }
+
+  function truncate(value, max) {
+    var s = String(value == null ? "" : value).trim();
+    return s.length > max ? s.slice(0, max).replace(/\s+\S*$/, "") + "…" : s;
+  }
+
+  function productNarrative(value) {
+    return truncate(String(value || "").replace(/^Real catalog hair product\.\s*/i, ""), 320);
+  }
+
+  function setStatus(msg, isErr) {
+    statusEl.textContent = msg;
+    statusEl.className = "status" + (isErr ? " err" : "");
+  }
+
+  function setCatalogNote(msg, isErr) {
+    catalogNoteEl.textContent = msg;
+    catalogNoteEl.className = "catalog-note" + (isErr ? " err" : "");
+  }
+
+  function setMetrics(items) {
+    metricsEl.innerHTML = items.map(function (item) {
+      return '<div class="metric"><span class="k">' + escapeHTML(item.k) + '</span><span class="v">' + escapeHTML(item.v) + '</span></div>';
+    }).join("");
+  }
+
+  function hash(str) {
+    var h = 2166136261;
+    for (var i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
+    }
+    return Math.abs(h >>> 0);
+  }
+
+  function toneFor(text) {
+    var tones = [
+      "linear-gradient(135deg,#141213,#2b2522)",
+      "linear-gradient(135deg,#241a16,#3d2c24)",
+      "linear-gradient(135deg,#43141a,#7c2f2a)",
+      "linear-gradient(135deg,#4a1322,#7a2438)",
+      "linear-gradient(135deg,#2e2018,#4a3526)",
+      "linear-gradient(135deg,#5e4128,#c4a06a)",
+      "linear-gradient(135deg,#100e0f,#2a2422)"
+    ];
+    return tones[hash(text) % tones.length];
+  }
+
+  function absoluteUrl(home, path) {
+    if (!path) return "";
+    var s = String(path);
+    if (s.indexOf("//") === 0) return "https:" + s;
+    if (/^https?:\/\//i.test(s)) return s;
+    try { return new URL(s, home).href; } catch (e) { return s; }
+  }
+
+  function productUrl(source, product) {
+    if (product.url) return absoluteUrl(source.home, product.url);
+    if (product.handle) return source.home.replace(/\/$/, "") + "/products/" + encodeURIComponent(product.handle);
+    return source.home;
+  }
+
+  function productImage(source, product) {
+    if (product.images && product.images.length) {
+      if (product.images[0].src) return absoluteUrl(source.home, product.images[0].src);
+      if (typeof product.images[0] === "string") return absoluteUrl(source.home, product.images[0]);
+    }
+    if (product.image && product.image.src) return absoluteUrl(source.home, product.image.src);
+    if (product.featured_image) return absoluteUrl(source.home, product.featured_image);
+    return "";
+  }
+
+  function tagsFor(product) {
+    if (Array.isArray(product.tags)) return product.tags.map(cleanText).filter(Boolean);
+    return String(product.tags || "").split(",").map(function (t) { return cleanText(t); }).filter(Boolean);
+  }
+
+  function isHairLook(product) {
+    var tags = tagsFor(product).join(" ");
+    var hay = [product.title, product.vendor, product.product_type, tags, cleanText(product.body_html, 260)].join(" ").toLowerCase();
+    var look = /(wig|lace front|full lace|hd lace|frontal|closure|bundle|weave|hair extension|extensions|crochet|braid|ponytail|drawstring|half wig|unit|bob|body wave|deep wave|kinky|curly|straight|water wave|loose wave|pixie|bang)/i.test(hay);
+    var accessoryOnly = /(shampoo|conditioner|edge control|spray|glue|adhesive|bonnet|brush|comb|cap|stand|tape|scarf|wax stick|mousse|serum)/i.test(hay) && !/(wig|lace|frontal|closure|bundle|weave|extension|ponytail|braid|unit)/i.test(hay);
+    return look && !accessoryOnly;
+  }
+
+  function lowestPrice(product) {
+    var prices = (product.variants || [])
+      .map(function (v) { return parseFloat(v.price); })
+      .filter(function (n) { return Number.isFinite(n); });
+    if (!prices.length) return "";
+    return "$" + Math.min.apply(Math, prices).toFixed(2).replace(/\.00$/, "");
+  }
+
+  // ───────────────────────── Semantic Field Engineering ─────────────────────
+  // Both query and candidates are projected into one orthogonal IMPRESSION
+  // space (sensory / energy descriptors). Coherence then measures whether a
+  // look *carries the feeling*, not whether two strings share product nouns.
+
+  // attribute cue  ->  impression descriptors the look projects
+  var LOOK_SIGNALS = [
+    [/straight|silky|bone straight|yaki/,        "sleek smooth polished sharp controlled"],
+    [/\bbob\b|blunt|pixie|short|cut/,            "sharp modern editorial clean precise"],
+    [/body wave|loose wave|beach wave/,          "soft effortless voluminous romantic relaxed"],
+    [/deep wave|curly|kinky|coil|afro|water wave/,"bold full textured natural dramatic"],
+    [/bang|fringe/,                              "playful framed striking"],
+    [/layer|feathered|wolf/,                     "movement dimension lived-in"],
+    [/long|24|26|28|30|32|34|36/,                "glamorous flowing statement"],
+    [/jet black|natural black|\bblack\b|\b1b\b/, "deep glossy sleek classic"],
+    [/brown|brunette|chocolate|mocha/,           "warm understated natural"],
+    [/blonde|platinum|honey|caramel|\b613\b/,    "bright sun-kissed expressive luminous"],
+    [/red|ginger|copper|burgundy|wine|auburn/,   "bold warm fierce expressive"],
+    [/highlight|ombre|balayage|two.?tone/,       "dimensional sun-touched modern"],
+    [/glueless|hd lace|lace front|frontal|natural hairline/, "seamless invisible effortless"],
+    [/curl|wave/,                                "soft movement"]
+  ];
+
+  function impressionsFor(hay) {
+    var lc = hay.toLowerCase(), out = [], seen = {};
+    LOOK_SIGNALS.forEach(function (pair) {
+      if (pair[0].test(lc)) pair[1].split(" ").forEach(function (w) {
+        if (!seen[w]) { seen[w] = 1; out.push(w); }
+      });
+    });
+    return out;
+  }
+
+  // candidate = look description (no boilerplate, no brand) + projected impressions
+  function buildCandidate(title, type, tags, description, hay) {
+    var imp = impressionsFor(hay);
+    var look = [title, type, tags.length ? tags.join(", ") : "", description]
+      .filter(Boolean).join(". ");
+    // lead with the impression field so the orthogonal signal is weighted,
+    // then ground it in the concrete look.
+    return (imp.length ? imp.join(" ") + ". " : "") + look;
+  }
+
+  // feeling cue  ->  outcome indicators (orthogonal to product nouns, no negation)
+  var FEELING_LEX = [
+    [/villain|villain era|dominat|ruthless|power move/, "sleek sharp jet-dark high-shine severe commanding dramatic untouchable"],
+    [/boss|ceo|boardroom|executive|corner office|in charge/, "polished sharp commanding refined controlled authoritative"],
+    [/soft|gentle|tender|delicate|gentle/,             "soft smooth gentle framed understated"],
+    [/clean girl|clean|minimal|effortless|undone|natural/, "effortless natural fresh undone lived-in low-key"],
+    [/rihanna|fenty|bad gal|bad girl|fearless|iconic/, "bold glossy statement fearless glamorous luminous"],
+    [/money|wealth|expensive|rich|luxe|quiet luxury|old money/, "expensive understated glossy refined polished easy"],
+    [/wedding|bride|romantic|in love|date night|elegant/, "romantic voluminous radiant elegant soft glamorous"],
+    [/90s|mom|nostalg|blowout|throwback|retro/,        "bouncy voluminous warm soft blowout nostalgic"],
+    [/baddie|glam|glamour|red carpet|diva|bombshell/,  "glamorous voluminous glossy dramatic statement"],
+    [/edgy|rock|punk|rebel|grunge|alt/,                "sharp edgy modern textured striking"],
+    [/sleek|slick|polished|sharp/,                      "sleek polished smooth controlled"],
+    [/bold|fierce|confident|powerful|strong|unbother/,  "bold commanding striking fierce statement"],
+    [/dreamy|ethereal|angelic|fairy|soft girl/,        "ethereal soft luminous flowing delicate"],
+    [/dark|gothic|mysterious|moody/,                   "deep glossy dramatic severe"],
+    [/sunny|warm|golden|summer|beach/,                 "sun-kissed bright relaxed luminous"]
+  ];
+
+  function engineerQuery(feeling) {
+    var lc = feeling.toLowerCase(), inds = [], seen = {};
+    FEELING_LEX.forEach(function (pair) {
+      if (pair[0].test(lc)) pair[1].split(" ").forEach(function (w) {
+        if (!seen[w]) { seen[w] = 1; inds.push(w); }
+      });
+    });
+    // raw feeling carries the user's register; mapped indicators bridge into the
+    // candidate impression space; the frame orients toward the visual signature
+    // without copying product nouns (wig / lace / bundle).
+    var parts = [feeling.trim()];
+    if (inds.length) parts.push(inds.join(" ") + ".");
+    parts.push("The look that radiates this — its silhouette, finish, movement, and presence.");
+    return parts.join(" ");
+  }
+
+  function normalizeProduct(source, product) {
+    var title = cleanText(product.title || product.name || "Untitled look", 90);
+    var vendor = cleanText(product.vendor || source.label, 42);
+    var type = cleanText(product.product_type || product.type || "", 48);
+    var tags = tagsFor(product).slice(0, 8);
+    var description = cleanText(product.body_html || product.description || "", 220);
+    var price = lowestPrice(product);
+    var img = productImage(source, product);
+    if (!title || !img || !isHairLook(product)) return null;
+
+    var specParts = [vendor, type, price].filter(Boolean);
+    var sourceLine = source.label + (price ? " · from " + price : "");
+
+    // ── Semantic Field Engineering: candidate = the LOOK in impression space ──
+    // No boilerplate scaffolding, no brand/store (those are constant noise that
+    // flattens field separation). Pure look attributes + derived sensory
+    // descriptors, so the candidate lives in the same orthogonal impression
+    // space the engineered query is pushed into.
+    var attrHay = [title, type, tags.join(" "), description].join(" ");
+    var candidate = buildCandidate(title, type, tags, description, attrHay);
+
+    // human-readable narrative kept separate, only for the on-card copy
+    var narrative = [title, type, tags.length ? tags.join(", ") : "", description]
+      .filter(Boolean).join(". ");
+
+    return {
+      id: source.label + ":" + (product.id || product.handle || title),
+      name: title,
+      img: img,
+      url: productUrl(source, product),
+      source: sourceLine,
+      spec: specParts.length ? specParts.join(" · ") : source.label,
+      tone: toneFor(title + vendor),
+      candidate: candidate.slice(0, 1100),
+      vibe: narrative.slice(0, 1100)
+    };
+  }
+
+  function uniqueProducts(items) {
+    var seen = {};
+    var out = [];
+    items.forEach(function (item) {
+      if (!item) return;
+      var key = (item.name + "|" + item.img).toLowerCase();
+      if (seen[key]) return;
+      seen[key] = true;
+      out.push(item);
+    });
+    return out;
+  }
+
+  function parseJSON(text) {
+    try { return JSON.parse(text); }
+    catch (e) {
+      var start = text.indexOf("{");
+      var end = text.lastIndexOf("}");
+      if (start >= 0 && end > start) return JSON.parse(text.slice(start, end + 1));
+      throw e;
+    }
+  }
+
+  function relayFetch(url) {
+    return "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
+  }
+
+  function fetchJSON(url) {
+    var attempts = [url, relayFetch(url)];
+    var lastError = null;
+    return attempts.reduce(function (chain, nextUrl) {
+      return chain.catch(function () {
+        return fetch(nextUrl, { cache: "no-store" }).then(function (res) {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.text();
+        }).then(parseJSON).catch(function (err) {
+          lastError = err;
+          throw err;
+        });
+      });
+    }, Promise.reject()).catch(function () {
+      throw lastError || new Error("catalog fetch failed");
+    });
+  }
+
+  function fetchSource(source) {
+    return fetchJSON(source.feed).then(function (data) {
+      var products = Array.isArray(data.products) ? data.products : [];
+      return products.map(function (p) { return normalizeProduct(source, p); }).filter(Boolean);
+    });
+  }
+
+  function rebuildTextIndex() {
+    byText = {};
+    catalog.forEach(function (u) { byText[u.candidate] = u; });
+  }
+
+  function loadCatalog() {
+    if (catalogPromise) return catalogPromise;
+    setCatalogNote("loading real product catalog…", false);
+    catalogPromise = Promise.allSettled(PRODUCT_SOURCES.map(fetchSource)).then(function (results) {
+      var loaded = [];
+      var liveSources = [];
+      results.forEach(function (result, idx) {
+        if (result.status === "fulfilled" && result.value.length) {
+          loaded = loaded.concat(result.value);
+          liveSources.push(PRODUCT_SOURCES[idx].label);
+        }
+      });
+      catalog = uniqueProducts(loaded).slice(0, CANDIDATE_LIMIT);
+      rebuildTextIndex();
+      if (!catalog.length) {
+        throw new Error("No retailer product feed returned usable wig images. Add an owned /api/catalog relay or confirm the source domains.");
+      }
+      setCatalogNote(catalog.length + " real catalog looks loaded · " + liveSources.slice(0, 3).join(" / ") + (liveSources.length > 3 ? " / +" + (liveSources.length - 3) : ""), false);
+      return catalog;
+    }).catch(function (err) {
+      setCatalogNote("catalog blocked: " + err.message, true);
+      throw err;
+    });
+    return catalogPromise;
+  }
+
+  function shotHTML(u, scoreTxt, className) {
+    var img = '<img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="' + escapeHTML(u.img) + '" alt="' + escapeHTML(u.name) + '" onerror="this.closest(\'.shot\').classList.add(\'image-missing\');this.remove();" />';
+    return '<div class="shot ' + className + '" style="background:' + escapeHTML(u.tone) + '">' + img + '<span class="score-badge">' + escapeHTML(scoreTxt) + '</span></div>';
+  }
+
+  function normalizeRanked(data) {
+    var rows = [];
+
+    if (data && Array.isArray(data.all)) rows = data.all;
+    else if (data && Array.isArray(data.results)) rows = data.results;
+    else if (data && Array.isArray(data.matches)) rows = data.matches;
+    else if (data && Array.isArray(data.rankings)) rows = data.rankings;
+    else if (Array.isArray(data)) rows = data;
+
+    rows = rows.map(function (row) {
+      var text = row.text || row.candidate || row.item || row.document || row.label || row.body || row.input;
+      var score = row.score;
+      if (score == null) score = row.coherence;
+      if (score == null) score = row.similarity;
+      if (score == null) score = row.value;
+      return { text: text, score: Number(score) };
+    }).filter(function (row) {
+      return row.text && Number.isFinite(row.score);
+    });
+
+    if (!rows.length && data && data.scores && Array.isArray(data.scores)) {
+      rows = data.scores.map(function (score, idx) {
+        return { text: catalog[idx] && catalog[idx].candidate, score: Number(score) };
+      }).filter(function (row) { return row.text && Number.isFinite(row.score); });
+    }
+
+    if (!rows.length) throw new Error("no coherence in local ARBITER response");
+    return rows.slice().sort(function (a, b) { return b.score - a.score; });
+  }
+
+  function postCompare(endpoint, query, items) {
+    return fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: query,
+        candidates: items.map(function (u) { return u.candidate; })
+      })
+    }).then(function (r) {
+      if (!r.ok) throw new Error(endpoint + " returned " + r.status);
+      return r.json();
+    }).then(normalizeRanked);
+  }
+
+  function compareLocal(query, items) {
+    return postCompare(API, query, items).catch(function (firstErr) {
+      return postCompare(API_FALLBACK, query, items).catch(function () {
+        throw firstErr;
+      });
+    });
+  }
+
+  function run() {
+    var query = qEl.value.trim();
+    if (!query) {
+      qEl.focus();
+      return;
+    }
+
+    resultsEl.hidden = false;
+    saidEl.textContent = query;
+    heroEl.innerHTML = "";
+    galleryEl.innerHTML = "";
+    setMetrics([]);
+    setStatus("loading catalog…", false);
+    goEl.disabled = true;
+    resultsEl.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    loadCatalog().then(function (items) {
+      setStatus("reading local ARBITER across " + items.length + " real looks…", false);
+      return compareLocal(engineerQuery(query), items);
+    }).then(function (ranked) {
+      render(ranked);
+    }).catch(function (e) {
+      setStatus(e.message + ". Real product images are required; no fake placeholder catalog was rendered.", true);
+    }).finally(function () {
+      goEl.disabled = false;
+    });
+  }
+
+  function render(ranked) {
+    var usable = ranked.filter(function (row) { return byText[row.text] && byText[row.text].img; });
+    if (!usable.length) throw new Error("ranked products did not map back to catalog images");
+
+    var top = usable[0].score;
+    var second = usable.length > 1 ? usable[1].score : top;
+    var lead = top - second;
+    var floor = usable[usable.length - 1].score;
+    var span = Math.max(0.0001, top - floor);
+
+    function fillPct(s) {
+      return Math.max(6, Math.round(((s - floor) / span) * 94 + 6));
+    }
+
+    setStatus(usable.length + " real looks read · the gap is the signal", false);
+    setMetrics([
+      { k: "Looks read", v: String(usable.length) },
+      { k: "Top score", v: top.toFixed(3) },
+      { k: "Lead gap", v: "+" + lead.toFixed(3) }
+    ]);
+
+    heroEl.innerHTML = "";
+    galleryEl.innerHTML = "";
+
+    var bars = [];
+    var h = usable[0];
+    var hu = byText[h.text];
+
+    var heroCard = document.createElement("article");
+    heroCard.className = "hero-card";
+    heroCard.innerHTML =
+      '<a class="hero-visual" href="' + escapeHTML(hu.url) + '" target="_blank" rel="noopener noreferrer">' + shotHTML(hu, h.score.toFixed(3), "") + '</a>' +
+      '<div class="hero-meta">' +
+        '<div class="eyebrow-row">' +
+          '<span class="eyebadge">Crowned</span>' +
+          '<span class="eyebadge">Live product</span>' +
+        '</div>' +
+        '<div class="hero-name"><a href="' + escapeHTML(hu.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHTML(hu.name) + '</a></div>' +
+        '<div class="meta-stack">' +
+          '<div class="spec">' + escapeHTML(hu.spec) + '</div>' +
+          '<div class="source">' + escapeHTML(hu.source) + '</div>' +
+        '</div>' +
+        '<div class="hero-copytext">' + escapeHTML(productNarrative(hu.vibe)) + '</div>' +
+        '<div class="hero-footer">' +
+          '<div class="bar"><i data-fill="100"></i></div>' +
+          '<div class="hero-actions">' +
+            '<a class="cta" href="' + escapeHTML(hu.url) + '" target="_blank" rel="noopener noreferrer">View product</a>' +
+            '<div class="lead-gap">Leads the field by +' + lead.toFixed(3) + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    heroEl.appendChild(heroCard);
+    bars.push([heroCard.querySelector(".bar > i"), 100]);
+
+    usable.slice(1).forEach(function (row, idx) {
+      var u = byText[row.text];
+      var card = document.createElement("article");
+      card.className = "gallery-card";
+      card.style.animationDelay = (idx * 40) + "ms";
+      card.innerHTML =
+        '<a class="card-visual" href="' + escapeHTML(u.url) + '" target="_blank" rel="noopener noreferrer">' + shotHTML(u, row.score.toFixed(3), "") + '</a>' +
+        '<div class="card-body">' +
+          '<div class="card-name"><a href="' + escapeHTML(u.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHTML(u.name) + '</a></div>' +
+          '<div class="spec">' + escapeHTML(u.spec) + '</div>' +
+          '<div class="card-copy">' + escapeHTML(productNarrative(u.vibe)) + '</div>' +
+          '<div class="card-foot">' +
+            '<div class="price-row">' +
+              '<div class="source">' + escapeHTML(u.source) + '</div>' +
+              '<a class="shop-link" href="' + escapeHTML(u.url) + '" target="_blank" rel="noopener noreferrer">Open</a>' +
+            '</div>' +
+            '<div class="bar"><i></i></div>' +
+          '</div>' +
+        '</div>';
+      galleryEl.appendChild(card);
+      bars.push([card.querySelector(".bar > i"), fillPct(row.score)]);
+    });
+
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        bars.forEach(function (b) { b[0].style.width = b[1] + "%"; });
+      });
+    });
+  }
+
+  goEl.addEventListener("click", run);
+  qEl.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") run();
+  });
+  loadCatalog().catch(function () {});
+})();
+</script>
+</body>
+</html>
