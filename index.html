@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>CROWN</title>
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,401,500,600,700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root {
     --bg: #0b0b0c;
@@ -84,24 +88,27 @@
 
   .scrim {
     position: absolute; inset: 0; z-index: 2; pointer-events: none;
-    background:
-      radial-gradient(120% 95% at 50% 46%, rgba(11,11,12,0.74) 0%, rgba(11,11,12,0.30) 42%, rgba(11,11,12,0.06) 70%),
-      linear-gradient(180deg, rgba(11,11,12,0.66) 0%, rgba(11,11,12,0) 22%, rgba(11,11,12,0) 74%, rgba(11,11,12,0.72) 100%);
+    background: linear-gradient(180deg, rgba(11,11,12,0.58) 0%, rgba(11,11,12,0) 15%, rgba(11,11,12,0) 82%, rgba(11,11,12,0.62) 100%);
   }
 
   .hbar {
     position: absolute; z-index: 4; top: 0; left: 0; right: 0;
-    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
     padding: clamp(16px, 2.4vw, 26px) clamp(16px, 3vw, 34px);
-    flex-wrap: wrap;
+    text-align: center;
   }
   .word {
-    font-weight: 700;
-    font-size: clamp(19px, 2.2vw, 26px);
-    letter-spacing: 0.26em;
+    line-height: 1;
     text-shadow: 0 2px 18px rgba(0,0,0,0.55);
+    white-space: nowrap;
   }
-  .scope { display: flex; gap: 4px 20px; flex-wrap: wrap; }
+  /* V1 — timeless geometric caps (default) */
+  .word.v1 { font-family: "Jost", var(--font); font-weight: 500; font-size: clamp(21px, 2.4vw, 29px); letter-spacing: 0.32em; text-indent: 0.32em; text-transform: uppercase; }
+  /* V2 — elegant serif */
+  .word.v2 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; font-size: clamp(26px, 3vw, 38px); letter-spacing: 0.2em; text-indent: 0.2em; text-transform: uppercase; }
+  /* V3 — bolder geometric */
+  .word.v3 { font-family: "Jost", var(--font); font-weight: 600; font-size: clamp(22px, 2.5vw, 31px); letter-spacing: 0.18em; text-indent: 0.18em; text-transform: uppercase; }
+  .scope { display: flex; gap: 4px 20px; flex-wrap: wrap; justify-content: center; }
   .scope button {
     background: none; border: 0; cursor: pointer;
     color: var(--faint);
@@ -121,6 +128,12 @@
     width: min(720px, calc(100% - 36px));
     text-align: center;
     display: grid; gap: 22px; justify-items: center;
+  }
+  .hcenter::before {
+    content: ""; position: absolute; z-index: -1; pointer-events: none;
+    left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 138%; height: 165%;
+    background: radial-gradient(closest-side, rgba(11,11,12,0.52) 0%, rgba(11,11,12,0.28) 48%, rgba(11,11,12,0) 80%);
   }
   .tagline {
     font-weight: 500;
@@ -284,7 +297,7 @@
     <div class="scrim" aria-hidden="true"></div>
 
     <div class="hbar">
-      <div class="word">CROWN</div>
+      <div class="word v1">CROWN</div>
       <nav class="scope" id="scope" aria-label="Category"></nav>
     </div>
 
@@ -322,13 +335,12 @@
   "use strict";
 
   var ENDPOINTS = [
-    "http://localhost:8000/v1/compare",
-    "http://127.0.0.1:8000/v1/compare",
     "https://api.arbiter.traut.ai/public/compare"
   ];
   var CANDIDATE_LIMIT = 110;
   var PER_SOURCE_CAP = 14;
   var HERO_MAX = 48;
+  var HERO_PER_SOURCE = 6;
 
   var PRODUCT_SOURCES = [
     { label: "Hanifa", category: "fashion", weight: 0, home: "https://hanifa.co", feed: "https://hanifa.co/products.json?limit=250" },
@@ -351,13 +363,21 @@
     { id: "makeup", label: "Makeup" }, { id: "skin", label: "Skin" }, { id: "body", label: "Body" }
   ];
   var CAT_LABEL = { fashion: "Fashion", hair: "Hair", makeup: "Makeup", skin: "Skin", body: "Body" };
-  var SEEDS = ["soft life", "villain era", "off-duty money", "wedding guest, untouchable", "clean girl, melanin"];
+  var SEEDS = {
+    all: ["soft life", "villain era", "off-duty money", "wedding guest, untouchable", "clean girl, melanin"],
+    fashion: ["off-duty money", "wedding guest, untouchable", "first day, new job", "all black, all attitude", "vacation editorial"],
+    hair: ["wash day reset", "protective but glam", "sleek bun, sharp edges", "curls doing the most", "big chop confidence"],
+    makeup: ["soft glam, no effort", "bold lip, quiet fit", "lit from within", "date night, low light", "my skin but better"],
+    skin: ["glass skin energy", "dark spots gone", "barrier repair era", "get my glow back", "bare face confidence"],
+    body: ["expensive skin", "post-shower ritual", "main character scent", "soft and glowy", "self care, no rush"]
+  };
 
   var catalog = [];
   var catalogPromise = null;
   var byText = {};
   var activeCategory = "all";
   var heroCount = 0;
+  var heroSeen = {};
   var live = [];
 
   var qEl = document.getElementById("q");
@@ -381,15 +401,21 @@
       if (activeCategory === c.id) return;
       activeCategory = c.id;
       Array.prototype.forEach.call(scopeEl.children, function (n, i) { n.setAttribute("aria-pressed", CATEGORIES[i].id === activeCategory ? "true" : "false"); });
+      renderFeelings(activeCategory);
       if (qEl.value.trim() && resultsEl.classList.contains("on")) run();
     });
     scopeEl.appendChild(b);
   });
-  SEEDS.forEach(function (s) {
-    var b = document.createElement("button"); b.type = "button"; b.textContent = s;
-    b.addEventListener("click", function () { qEl.value = s; run(); });
-    feelEl.appendChild(b);
-  });
+  function renderFeelings(cat) {
+    var list = SEEDS[cat] || SEEDS.all;
+    feelEl.innerHTML = "";
+    list.forEach(function (s) {
+      var b = document.createElement("button"); b.type = "button"; b.textContent = s;
+      b.addEventListener("click", function () { qEl.value = s; run(); });
+      feelEl.appendChild(b);
+    });
+  }
+  renderFeelings(activeCategory);
 
   function escapeHTML(v) { return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
   function decodeHTML(v) { var t = document.createElement("textarea"); t.innerHTML = String(v == null ? "" : v); return t.value; }
@@ -512,14 +538,20 @@
   }
   function rebuildIndex() { byText = {}; catalog.forEach(function (u) { byText[u.vibe] = u; }); }
 
+  function imgKey(src) { return String(src).split("?")[0].toLowerCase(); }
+
   function appendHero(items) {
     var pics = [];
     items.forEach(function (u) { u.images.forEach(function (src) { pics.push({ src: src, item: u }); }); });
     shuffle(pics);
     var frag = document.createDocumentFragment();
-    pics.forEach(function (p) {
-      if (heroCount >= HERO_MAX) return;
-      heroCount++;
+    var added = 0, seenProd = {};
+    for (var i = 0; i < pics.length; i++) {
+      if (heroCount >= HERO_MAX || added >= HERO_PER_SOURCE) break;
+      var p = pics[i], k = imgKey(p.src);
+      if (heroSeen[k] || seenProd[p.item.name]) continue;
+      heroSeen[k] = true; seenProd[p.item.name] = true;
+      heroCount++; added++;
       var a = document.createElement("a");
       a.className = "sfig";
       a.href = p.item.url; a.target = "_blank"; a.rel = "noopener noreferrer";
@@ -527,7 +559,7 @@
         '<img loading="eager" decoding="async" referrerpolicy="no-referrer" src="' + escapeHTML(p.src) + '" alt="' + escapeHTML(p.item.name) + '" onload="this.classList.add(\'in\')" onerror="this.closest(\'.sfig\').classList.add(\'dead\')" />' +
         '<span class="tag">' + escapeHTML(p.item.catLabel || p.item.source) + '</span>';
       frag.appendChild(a);
-    });
+    }
     hgridEl.appendChild(frag);
   }
 
