@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,22 +12,31 @@
 <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,401,500,600,700&display=swap" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
+
   :root {
-    --bg: #0b0b0c;
-    --bg-2: #151517;
-    --tile: #1b1b1d;
-    --white: #f4f2ee;
-    --dim: rgba(244,242,238,0.62);
-    --faint: rgba(244,242,238,0.40);
-    --line: rgba(244,242,238,0.16);
-    --line-2: rgba(244,242,238,0.10);
+    --bg: #f2eee6;
+    --bg-2: #fffaf1;
+    --tile: #d8d0c3;
+    --ink: #11100e;
+    --white: #11100e;
+    --dim: rgba(17,16,14,0.68);
+    --faint: rgba(17,16,14,0.44);
+    --line: rgba(17,16,14,0.24);
+    --line-2: rgba(17,16,14,0.12);
+    --cream: #fff8ec;
+    --paper: #f7f0e4;
+    --bone: #e7dece;
+    --black: #11100e;
+    --red: #c83b22;
+    --orange: #e56d22;
+    --blue: #243c7a;
     --font: "Switzer", system-ui, -apple-system, sans-serif;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0 !important; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   body {
-    background: var(--bg);
-    color: var(--white);
+    background: var(--paper);
+    color: var(--ink);
     font-family: var(--font);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -35,260 +45,437 @@
   a { color: inherit; text-decoration: none; }
   img { display: block; }
 
-  /* ---------- hero: full-viewport streaming image grid ---------- */
+  /* ---------- hero: Kai Collective color wall x American Apparel catalog ---------- */
   .hero {
     position: relative;
     height: 100svh;
-    min-height: 560px;
+    min-height: 620px;
     overflow: hidden;
-    background: var(--bg);
+    background: var(--paper);
+    border-bottom: 1px solid var(--black);
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, rgba(17,16,14,0.42) 0%, rgba(17,16,14,0) 14%, rgba(17,16,14,0) 86%, rgba(17,16,14,0.34) 100%),
+      linear-gradient(180deg, rgba(247,240,228,0.22) 0%, rgba(247,240,228,0) 22%, rgba(247,240,228,0) 78%, rgba(247,240,228,0.28) 100%);
+  }
+  .hero::after {
+    content: "CROWN / LOOK INDEX / LIVE CATALOG";
+    position: absolute;
+    z-index: 5;
+    right: clamp(14px, 2vw, 26px);
+    bottom: clamp(14px, 2vw, 26px);
+    color: rgba(17,16,14,0.72);
+    background: rgba(255,248,236,0.78);
+    border: 1px solid rgba(17,16,14,0.22);
+    padding: 10px 12px;
+    font-size: 10px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    pointer-events: none;
+    backdrop-filter: blur(8px);
   }
   .hgrid {
     position: absolute;
     inset: 0;
-    column-count: 6;
-    column-gap: 4px;
-    padding: 4px;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 6px;
+    padding: 6px;
     overflow: hidden;
+    background: var(--black);
+  }
+  .hcol {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    will-change: transform;
+    animation: heroColumnScroll var(--hero-speed, 720s) linear infinite;
+  }
+  .hcol:nth-child(2n) { animation-name: heroColumnScrollReverse; --hero-speed: 840s; }
+  .hcol:nth-child(3n) { --hero-speed: 960s; }
+  .hgrid:hover .hcol { animation-play-state: paused; }
+  .hstack {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 100svh;
   }
   .sfig {
     position: relative;
     display: block;
     width: 100%;
-    margin-bottom: 4px;
+    aspect-ratio: 4 / 5;
     background: var(--tile);
     overflow: hidden;
-    break-inside: avoid;
+    flex: 0 0 auto;
   }
+  .sfig:nth-child(3n) { aspect-ratio: 1 / 1; }
+  .sfig:nth-child(5n) { aspect-ratio: 3 / 4; }
   .sfig img {
     width: 100%;
-    height: auto;
+    height: 100%;
     object-fit: cover;
+    object-position: center top;
     opacity: 0;
-    transform: scale(1.02);
-    transition: opacity .7s ease, transform 1.2s ease;
+    filter: saturate(1.12) contrast(1.05) brightness(1.01);
+    transform: scale(1.012);
+    transition: opacity .7s ease, transform 1.2s ease, filter .3s ease;
   }
   .sfig img.in { opacity: 1; transform: none; }
+  .sfig:hover img { filter: saturate(1.2) contrast(1.08) brightness(1.03); transform: scale(1.025); }
   .sfig.dead { display: none; }
   .sfig::after {
     content: "";
-    position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(11,11,12,0) 55%, rgba(11,11,12,0.5) 100%);
-    opacity: 0; transition: opacity .3s ease;
+    position: absolute;
+    inset: 0;
     pointer-events: none;
+    background: linear-gradient(180deg, rgba(17,16,14,0) 58%, rgba(17,16,14,0.42) 100%);
+    opacity: .16;
+    transition: opacity .25s ease;
   }
-  .sfig:hover::after { opacity: 1; }
+  .sfig:hover::after { opacity: .34; }
   .sfig .tag {
-    position: absolute; left: 10px; bottom: 9px;
-    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--white); opacity: 0; transform: translateY(4px);
-    transition: opacity .25s ease, transform .25s ease; z-index: 2;
+    position: absolute;
+    left: 9px;
+    bottom: 8px;
+    z-index: 2;
+    padding: 4px 6px;
+    background: rgba(17,16,14,0.82);
+    color: var(--cream);
+    font-size: 9px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity .2s ease, transform .2s ease;
   }
   .sfig:hover .tag { opacity: 1; transform: none; }
 
+  @keyframes heroColumnScroll {
+    from { transform: translateY(0); }
+    to { transform: translateY(-50%); }
+  }
+  @keyframes heroColumnScrollReverse {
+    from { transform: translateY(-50%); }
+    to { transform: translateY(0); }
+  }
+
   .scrim {
-    position: absolute; inset: 0; z-index: 2; pointer-events: none;
-    background: linear-gradient(180deg, rgba(11,11,12,0.58) 0%, rgba(11,11,12,0) 15%, rgba(11,11,12,0) 82%, rgba(11,11,12,0.62) 100%);
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 50% 52%, rgba(247,240,228,0.20) 0%, rgba(247,240,228,0.12) 34%, rgba(17,16,14,0.10) 100%),
+      linear-gradient(180deg, rgba(17,16,14,0.24) 0%, rgba(17,16,14,0.03) 32%, rgba(17,16,14,0.03) 68%, rgba(17,16,14,0.20) 100%);
   }
 
   .hbar {
-    position: absolute; z-index: 4; top: 0; left: 0; right: 0;
-    display: flex; flex-direction: column; align-items: center; gap: 12px;
-    padding: clamp(16px, 2.4vw, 26px) clamp(16px, 3vw, 34px);
-    text-align: center;
+    position: absolute;
+    z-index: 4;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 0;
+    min-height: 72px;
+    background: rgba(255,248,236,0.92);
+    border-bottom: 1px solid var(--black);
+    backdrop-filter: blur(8px);
   }
   .word {
     line-height: 1;
-    text-shadow: 0 2px 18px rgba(0,0,0,0.55);
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    color: var(--black);
+    border-right: 1px solid var(--black);
   }
-  /* V1 — timeless geometric caps (default) */
-  .word.v1 { font-family: "Jost", var(--font); font-weight: 500; font-size: clamp(21px, 2.4vw, 29px); letter-spacing: 0.32em; text-indent: 0.32em; text-transform: uppercase; }
-  /* V2 — elegant serif */
-  .word.v2 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; font-size: clamp(26px, 3vw, 38px); letter-spacing: 0.2em; text-indent: 0.2em; text-transform: uppercase; }
-  /* V3 — bolder geometric */
-  .word.v3 { font-family: "Jost", var(--font); font-weight: 600; font-size: clamp(22px, 2.5vw, 31px); letter-spacing: 0.18em; text-indent: 0.18em; text-transform: uppercase; }
-  .scope { display: flex; gap: 4px 20px; flex-wrap: wrap; justify-content: center; }
+  .word.v1,
+  .word.v2,
+  .word.v3 {
+    font-family: "Jost", var(--font);
+    font-weight: 600;
+    font-size: clamp(24px, 2.7vw, 40px);
+    letter-spacing: .30em;
+    text-indent: .30em;
+    text-transform: uppercase;
+  }
+  .scope {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: stretch;
+    overflow-x: auto;
+  }
   .scope button {
-    background: none; border: 0; cursor: pointer;
-    color: var(--faint);
+    background: rgba(255,248,236,0.0);
+    border: 0;
+    border-left: 1px solid rgba(17,16,14,0.18);
+    cursor: pointer;
+    color: rgba(17,16,14,0.64);
     font-family: var(--font);
-    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
-    padding: 4px 0;
-    border-bottom: 1px solid transparent;
-    text-shadow: 0 2px 14px rgba(0,0,0,0.5);
-    transition: color .15s ease, border-color .15s ease;
+    font-size: 10px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    padding: 0 18px;
+    min-height: 72px;
+    transition: color .15s ease, background .15s ease;
   }
-  .scope button:hover { color: var(--white); }
-  .scope button[aria-pressed="true"] { color: var(--white); border-color: var(--white); }
+  .scope button:hover { color: var(--black); background: rgba(200,59,34,0.10); }
+  .scope button[aria-pressed="true"] { color: var(--cream); background: var(--black); }
 
   .hcenter {
-    position: absolute; z-index: 4; left: 50%; top: 50%;
+    position: absolute;
+    z-index: 4;
+    left: 50%;
+    top: 52%;
     transform: translate(-50%, -50%);
-    width: min(720px, calc(100% - 36px));
-    text-align: center;
-    display: grid; gap: 22px; justify-items: center;
+    width: min(860px, calc(100% - 44px));
+    text-align: left;
+    display: grid;
+    background: rgba(255,248,236,0.94);
+    border: 1px solid var(--black);
+    box-shadow: 14px 14px 0 rgba(17,16,14,0.34);
   }
-  .hcenter::before {
-    content: ""; position: absolute; z-index: -1; pointer-events: none;
-    left: 50%; top: 50%; transform: translate(-50%, -50%);
-    width: 138%; height: 165%;
-    background: radial-gradient(closest-side, rgba(11,11,12,0.52) 0%, rgba(11,11,12,0.28) 48%, rgba(11,11,12,0) 80%);
-  }
+  .hcenter::before,
+  .hcenter::after { display: none; }
   .tagline {
-    font-weight: 500;
-    font-size: clamp(13px, 1.5vw, 16px);
-    letter-spacing: 0.04em;
-    color: var(--dim);
-    text-shadow: 0 2px 20px rgba(0,0,0,0.6);
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: rgba(17,16,14,0.58);
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid rgba(17,16,14,0.18);
+    background: rgba(247,240,228,0.78);
   }
   .lede {
     font-weight: 600;
     font-size: clamp(34px, 6vw, 72px);
-    line-height: 0.98;
-    letter-spacing: -0.03em;
-    text-shadow: 0 4px 40px rgba(0,0,0,0.55);
+    line-height: .98;
+    letter-spacing: -.03em;
   }
   .search-line {
     width: 100%;
-    display: flex; align-items: center; gap: 14px;
-    border-bottom: 1.5px solid rgba(244,242,238,0.7);
-    padding-bottom: 14px;
-    transition: border-color .2s ease;
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    border: 0;
+    border-bottom: 1px solid var(--black);
+    padding: 0;
+    background: var(--cream);
+    transition: background .15s ease;
   }
-  .search-line:focus-within { border-color: var(--white); }
+  .search-line:focus-within { background: #fffdf7; }
   #q {
-    flex: 1; min-width: 0;
-    background: none; border: 0; outline: 0;
-    color: var(--white);
-    font-family: var(--font);
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: var(--black);
+    font-family: "Jost", var(--font);
     font-weight: 500;
-    font-size: clamp(18px, 2.4vw, 27px);
-    letter-spacing: -0.01em;
-    text-shadow: 0 2px 18px rgba(0,0,0,0.55);
+    font-size: clamp(26px, 4vw, 58px);
+    letter-spacing: -.035em;
+    padding: 23px 24px 25px;
   }
-  #q::placeholder { color: rgba(244,242,238,0.5); font-weight: 400; }
+  #q::placeholder { color: rgba(17,16,14,0.36); font-weight: 500; }
   #go {
-    flex: 0 0 auto;
-    width: 46px; height: 46px;
-    background: var(--white); color: var(--bg);
-    border: 0; cursor: pointer;
-    font-size: 20px; line-height: 1;
-    display: grid; place-items: center;
+    flex: 0 0 92px;
+    min-height: 92px;
+    background: var(--red);
+    color: var(--cream);
+    border: 0;
+    border-left: 1px solid var(--black);
+    cursor: pointer;
+    font-size: 30px;
+    line-height: 1;
+    display: grid;
+    place-items: center;
     transition: background .15s ease, transform .15s ease;
   }
-  #go:hover { transform: translateX(2px); }
-  #go:disabled { opacity: .5; cursor: default; transform: none; }
+  #go:hover { background: var(--orange); transform: none; }
+  #go:disabled { opacity: .55; cursor: default; }
 
-  .feelings { display: flex; flex-wrap: wrap; gap: 8px 8px; justify-content: center; }
-  .feelings button {
-    background: rgba(11,11,12,0.4);
-    border: 1px solid var(--line);
-    color: var(--dim);
-    font-family: var(--font);
-    font-size: 13px;
-    padding: 8px 13px;
-    cursor: pointer;
-    backdrop-filter: blur(4px);
-    transition: color .15s ease, border-color .15s ease, background .15s ease;
+  .feelings {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
   }
-  .feelings button:hover { color: var(--white); border-color: var(--white); background: rgba(11,11,12,0.6); }
+  .feelings button {
+    background: rgba(255,248,236,0.92);
+    border: 0;
+    border-right: 1px solid rgba(17,16,14,0.18);
+    border-bottom: 1px solid rgba(17,16,14,0.18);
+    color: rgba(17,16,14,0.72);
+    font-family: var(--font);
+    font-size: 12px;
+    line-height: 1.15;
+    padding: 16px 13px;
+    cursor: pointer;
+    transition: color .15s ease, background .15s ease;
+    text-align: left;
+  }
+  .feelings button:last-child { border-right: 0; }
+  .feelings button:hover { color: var(--cream); background: var(--black); }
 
   .hfoot {
-    position: absolute; z-index: 4; left: clamp(16px, 3vw, 34px); bottom: clamp(14px, 2vw, 22px);
-    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--faint);
-    text-shadow: 0 2px 14px rgba(0,0,0,0.5);
+    position: absolute;
+    z-index: 4;
+    left: clamp(12px, 2vw, 26px);
+    bottom: clamp(12px, 2vw, 26px);
+    color: var(--cream);
+    background: rgba(17,16,14,0.88);
+    border: 1px solid rgba(255,248,236,0.32);
+    padding: 10px 12px;
+    font-size: 10px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    backdrop-filter: blur(6px);
   }
-  .hfoot.err { color: var(--white); }
+  .hfoot.err { color: var(--cream); }
 
   /* ---------- results ---------- */
-  .results { display: none; }
+  .results {
+    display: none;
+    background: var(--paper);
+    color: var(--black);
+  }
   .results.on { display: block; }
 
   .rhead {
-    display: flex; justify-content: space-between; align-items: flex-end; gap: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 28px;
     flex-wrap: wrap;
-    padding: clamp(28px, 4vw, 56px) clamp(16px, 3vw, 34px) clamp(18px, 2.4vw, 28px);
-    border-bottom: 1px solid var(--line-2);
+    padding: clamp(30px, 4vw, 58px) clamp(16px, 3vw, 34px) clamp(18px, 2.4vw, 28px);
+    border-bottom: 1px solid var(--black);
+    background: var(--cream);
   }
-  .rhead .said-k { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); margin-bottom: 14px; }
+  .rhead .said-k { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: rgba(17,16,14,0.52); margin-bottom: 14px; }
   .rhead .said {
+    font-family: "Jost", var(--font);
     font-weight: 600;
-    font-size: clamp(30px, 5vw, 62px);
-    line-height: 0.96;
-    letter-spacing: -0.025em;
-    max-width: 18ch;
+    font-size: clamp(32px, 5.4vw, 72px);
+    line-height: .94;
+    letter-spacing: -.045em;
+    max-width: 16ch;
   }
-  .readout { display: flex; gap: 28px; flex-wrap: wrap; }
-  .readout .k { display: block; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); margin-bottom: 6px; }
-  .readout .v { display: block; font-weight: 600; font-size: 26px; font-variant-numeric: tabular-nums; }
+  .readout { display: flex; gap: 0; flex-wrap: wrap; border: 1px solid var(--black); }
+  .readout > div { min-width: 104px; padding: 14px 16px; border-right: 1px solid var(--black); background: var(--paper); }
+  .readout > div:last-child { border-right: 0; }
+  .readout .k { display: block; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: rgba(17,16,14,0.52); margin-bottom: 8px; }
+  .readout .v { display: block; font-weight: 700; font-size: 28px; font-variant-numeric: tabular-nums; }
 
   .rstatus {
     padding: 14px clamp(16px, 3vw, 34px);
-    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--faint);
-    border-bottom: 1px solid var(--line-2);
+    font-size: 10px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(17,16,14,0.58);
+    border-bottom: 1px solid var(--black);
+    background: var(--paper);
   }
 
   .lead { display: none; }
-  .lead.on { display: grid; grid-template-columns: 1.25fr 1fr; }
-  .lead-shot { position: relative; background: var(--tile); min-height: clamp(380px, 62vh, 760px); overflow: hidden; }
-  .lead-shot img { width: 100%; height: 100%; object-fit: cover; }
+  .lead.on { display: grid; grid-template-columns: 1.28fr 1fr; border-bottom: 1px solid var(--black); }
+  .lead-shot { position: relative; background: var(--tile); min-height: clamp(420px, 64vh, 780px); overflow: hidden; border-right: 1px solid var(--black); }
+  .lead-shot img { width: 100%; height: 100%; object-fit: cover; filter: saturate(1.08) contrast(1.04); }
   .lead-shot.dead img { display: none; }
-  .lead-rank { position: absolute; top: 16px; left: 20px; font-weight: 700; font-size: clamp(34px, 5vw, 64px); letter-spacing: -0.02em; mix-blend-mode: difference; color: #fff; }
-  .lead-meta { padding: clamp(26px, 3.4vw, 52px); display: flex; flex-direction: column; justify-content: center; gap: 16px; border-left: 1px solid var(--line-2); }
-  .lead-tag { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); }
-  .lead-name { font-weight: 600; font-size: clamp(26px, 3.4vw, 46px); line-height: 1.0; letter-spacing: -0.02em; }
-  .lead-name a:hover { color: var(--dim); }
-  .lead-spec { font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); }
-  .lead-copy { font-size: 15px; line-height: 1.62; color: var(--dim); max-width: 52ch; }
+  .lead-rank { position: absolute; top: 16px; left: 18px; font-weight: 700; font-size: clamp(38px, 5.4vw, 74px); letter-spacing: -.04em; color: var(--cream); text-shadow: 0 2px 18px rgba(17,16,14,0.58); }
+  .lead-meta { padding: clamp(28px, 4vw, 58px); display: flex; flex-direction: column; justify-content: center; gap: 17px; background: var(--cream); }
+  .lead-tag { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: rgba(17,16,14,0.52); }
+  .lead-name { font-family: "Jost", var(--font); font-weight: 600; font-size: clamp(28px, 3.6vw, 52px); line-height: .96; letter-spacing: -.04em; }
+  .lead-name a:hover { color: var(--red); }
+  .lead-spec { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: rgba(17,16,14,0.52); }
+  .lead-copy { font-size: 15px; line-height: 1.58; color: rgba(17,16,14,0.68); max-width: 52ch; }
   .lead-score { display: flex; align-items: baseline; gap: 12px; }
-  .lead-score .big { font-weight: 700; font-size: 40px; font-variant-numeric: tabular-nums; }
-  .lead-score .lab { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
+  .lead-score .big { font-weight: 800; font-size: 44px; font-variant-numeric: tabular-nums; }
+  .lead-score .lab { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: rgba(17,16,14,0.52); }
   .lead-cta {
-    margin-top: 6px; width: max-content;
-    background: var(--white); color: var(--bg);
-    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600;
-    padding: 13px 20px; transition: opacity .15s ease;
+    margin-top: 8px;
+    width: max-content;
+    background: var(--black);
+    color: var(--cream);
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 15px 20px;
+    transition: background .15s ease;
   }
-  .lead-cta:hover { opacity: 0.82; }
+  .lead-cta:hover { background: var(--red); }
 
-  .gridhead { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; padding: clamp(22px,3vw,36px) clamp(16px,3vw,34px) 16px; }
-  .gridhead h2 { font-weight: 600; font-size: clamp(15px, 1.8vw, 19px); letter-spacing: 0.04em; }
-  .gridhead .note { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
+  .gridhead { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; padding: clamp(22px,3vw,36px) clamp(16px,3vw,34px) 16px; background: var(--paper); }
+  .gridhead h2 { font-weight: 700; font-size: clamp(15px, 1.8vw, 19px); letter-spacing: .06em; text-transform: uppercase; }
+  .gridhead .note { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: rgba(17,16,14,0.52); }
 
-  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
-  .tile { display: flex; flex-direction: column; background: var(--bg-2); opacity: 0; transform: translateY(10px); animation: rise .5s ease forwards; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 0 6px 6px; background: var(--black); }
+  .tile { display: flex; flex-direction: column; background: var(--cream); opacity: 0; transform: translateY(10px); animation: rise .5s ease forwards; }
   .tile-shot { position: relative; aspect-ratio: 3 / 4; background: var(--tile); overflow: hidden; }
-  .tile-shot img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
-  .tile:hover .tile-shot img { transform: scale(1.04); }
+  .tile-shot img { width: 100%; height: 100%; object-fit: cover; transition: transform .45s ease; filter: saturate(1.08) contrast(1.04); }
+  .tile:hover .tile-shot img { transform: scale(1.035); }
   .tile-shot.dead img { display: none; }
-  .tile-shot.dead::after { content: "unavailable"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--faint); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; }
-  .tile-rank { position: absolute; top: 10px; left: 12px; font-weight: 700; font-size: 26px; mix-blend-mode: difference; color: #fff; }
-  .tile-score { position: absolute; top: 12px; right: 12px; font-weight: 600; font-size: 14px; font-variant-numeric: tabular-nums; background: rgba(11,11,12,0.5); padding: 3px 7px; }
-  .tile-body { padding: 14px 14px 18px; display: grid; gap: 7px; }
-  .tile-name { font-weight: 600; font-size: 17px; line-height: 1.12; letter-spacing: -0.01em; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
-  .tile-name a:hover { color: var(--dim); }
-  .tile-meta { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); }
-  .tile-shop { margin-top: 2px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
-  .tile-shop:hover { color: var(--white); }
+  .tile-shot.dead::after { content: "unavailable"; position: absolute; inset: 0; display: grid; place-items: center; color: rgba(17,16,14,0.52); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; }
+  .tile-rank { position: absolute; top: 10px; left: 11px; font-weight: 800; font-size: 26px; color: var(--cream); text-shadow: 0 2px 12px rgba(17,16,14,0.58); }
+  .tile-score { position: absolute; top: 10px; right: 10px; font-weight: 700; font-size: 13px; font-variant-numeric: tabular-nums; background: rgba(255,248,236,0.88); border: 1px solid rgba(17,16,14,0.28); color: var(--black); padding: 4px 7px; }
+  .tile-body { padding: 14px 14px 17px; display: grid; gap: 7px; }
+  .tile-name { font-weight: 700; font-size: 17px; line-height: 1.1; letter-spacing: -.015em; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+  .tile-name a:hover { color: var(--red); }
+  .tile-meta { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: rgba(17,16,14,0.50); }
+  .tile-shop { margin-top: 2px; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: rgba(17,16,14,0.68); font-weight: 700; }
+  .tile-shop:hover { color: var(--red); }
 
   @keyframes rise { to { opacity: 1; transform: none; } }
 
-  @media (max-width: 1200px) { .hgrid { column-count: 5; } }
+  @media (max-width: 1200px) { .hgrid { grid-template-columns: repeat(5, minmax(0, 1fr)); } .hcol:nth-child(n+6) { display: none; } }
   @media (max-width: 980px) {
-    .hgrid { column-count: 4; }
+    .hgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .hcol:nth-child(n+5) { display: none; }
     .lead.on { grid-template-columns: 1fr; }
-    .lead-meta { border-left: 0; border-top: 1px solid var(--line-2); }
+    .lead-shot { border-right: 0; border-bottom: 1px solid var(--black); }
     .grid { grid-template-columns: repeat(3, 1fr); }
+    .feelings { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
-  @media (max-width: 680px) { .hgrid { column-count: 3; } .grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 460px) { .hgrid { column-count: 2; } .readout { gap: 20px; } }
+  @media (max-width: 680px) {
+    .hgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .hcol:nth-child(n+4) { display: none; }
+    .hbar { min-height: 0; flex-direction: column; align-items: stretch; }
+    .word { justify-content: center; min-height: 58px; border-right: 0; border-bottom: 1px solid var(--black); }
+    .scope { justify-content: stretch; }
+    .scope button { flex: 1 1 auto; min-height: 44px; padding: 0 10px; }
+    .hcenter { left: 14px; right: 14px; top: 55%; transform: translateY(-50%); width: auto; box-shadow: 8px 8px 0 rgba(17,16,14,0.34); }
+    #q { font-size: clamp(22px, 7vw, 38px); padding: 18px 16px 19px; }
+    #go { flex-basis: 70px; min-height: 70px; }
+    .feelings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .feelings button { font-size: 11px; padding: 13px 12px; }
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 460px) {
+    .hgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hcol:nth-child(n+3) { display: none; }
+    .readout { width: 100%; }
+    .readout > div { flex: 1; min-width: 0; }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .sfig img, .tile { transition: none !important; animation: none !important; opacity: 1 !important; transform: none !important; }
+    .hcol { animation: none !important; transform: none !important; }
   }
+
 </style>
 </head>
 <body>
@@ -338,9 +525,10 @@
     "https://api.arbiter.traut.ai/public/compare"
   ];
   var CANDIDATE_LIMIT = 110;
-  var PER_SOURCE_CAP = 14;
-  var HERO_MAX = 48;
-  var HERO_PER_SOURCE = 6;
+  var PER_SOURCE_CAP = 24;
+  var HERO_MAX = 180;
+  var HERO_PER_SOURCE = 18;
+  var HERO_COLUMNS = 6;
 
   var PRODUCT_SOURCES = [
     { label: "Hanifa", category: "fashion", weight: 0, home: "https://hanifa.co", feed: "https://hanifa.co/products.json?limit=250" },
@@ -385,6 +573,8 @@
   var scopeEl = document.getElementById("scope");
   var feelEl = document.getElementById("feelings");
   var hgridEl = document.getElementById("hgrid");
+  var heroPrimaryStacks = [];
+  var heroMirrorStacks = [];
   var srclineEl = document.getElementById("srcline");
   var resultsEl = document.getElementById("results");
   var saidEl = document.getElementById("said");
@@ -392,6 +582,40 @@
   var statusEl = document.getElementById("status");
   var leadEl = document.getElementById("lead");
   var gridEl = document.getElementById("grid");
+
+  function setupHeroGrid() {
+    hgridEl.innerHTML = "";
+    heroPrimaryStacks = [];
+    heroMirrorStacks = [];
+    for (var i = 0; i < HERO_COLUMNS; i++) {
+      var col = document.createElement("div");
+      col.className = "hcol";
+      var primary = document.createElement("div");
+      primary.className = "hstack hstack-primary";
+      var mirror = document.createElement("div");
+      mirror.className = "hstack hstack-mirror";
+      mirror.setAttribute("aria-hidden", "true");
+      col.appendChild(primary);
+      col.appendChild(mirror);
+      hgridEl.appendChild(col);
+      heroPrimaryStacks.push(primary);
+      heroMirrorStacks.push(mirror);
+    }
+  }
+
+  function syncHeroMirrors() {
+    heroPrimaryStacks.forEach(function (primary, i) {
+      var mirror = heroMirrorStacks[i];
+      if (!mirror) return;
+      mirror.innerHTML = primary.innerHTML;
+      Array.prototype.forEach.call(mirror.querySelectorAll("img"), function (img) {
+        img.loading = "lazy";
+        if (img.complete) img.classList.add("in");
+      });
+    });
+  }
+
+  setupHeroGrid();
 
   CATEGORIES.forEach(function (c) {
     var b = document.createElement("button");
@@ -475,6 +699,270 @@
     if (!prices.length) return "";
     return "$" + Math.min.apply(Math, prices).toFixed(2).replace(/\.00$/, "");
   }
+
+  function cleanCandidatePhrase(v, max) {
+    var s = String(v == null ? "" : v)
+      .replace(/<script[\s\S]*?<\/script>/gi, " ")
+      .replace(/<style[\s\S]*?<\/style>/gi, " ")
+      .replace(/<[^>]+>/g, " ");
+    s = decodeHTML(s)
+      .replace(/\b(pre[- ]?order|new arrival|new|sale|sold out|final sale|shop now|add to cart|limited edition|default title)\b/gi, " ")
+      .replace(/\b(price|regular price|unit price|availability|quantity|variant|sku|inventory|shipping|returns|afterpay|klarna|sezzle|installments)\b/gi, " ")
+      .replace(/[•·|_]+/g, " ")
+      .replace(/\/\/+|--+/g, " ")
+      .replace(/\(\s*\)/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (max && s.length > max) s = s.slice(0, max).replace(/\s+\S*$/, "");
+    return s;
+  }
+
+  function uniqueWords(list) {
+    var seen = {}, out = [];
+    (list || []).forEach(function (v) {
+      var s = cleanCandidatePhrase(v, 54).toLowerCase().trim();
+      if (!s || s.length < 3 || seen[s]) return;
+      seen[s] = true;
+      out.push(s);
+    });
+    return out;
+  }
+
+  function titleCaseFirst(v) {
+    var s = String(v || "").trim();
+    return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+  }
+
+  function cleanCandidateTitle(title) {
+    return cleanCandidatePhrase(title, 96)
+      .replace(/\((?:\s|pre[- ]?order|ships?|ship|available|coming|\d|\/|\-|\.|:|am|pm)*\)/gi, " ")
+      .replace(/\bpre[- ]?order\b.*$/gi, " ")
+      .replace(/\bfinal sale\b/gi, " ")
+      .replace(/\s+[-–—]\s*$/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function visualText(description) {
+    var s = cleanCandidatePhrase(description, 700);
+    s = s
+      .replace(/\b(details?|description|size\s*&\s*fit|fit guide|care|fabric|materials?|shipping|returns?|editor'?s notes?)\s*:?/gi, " ")
+      .replace(/\bships?\s+in\s+[^.;]+[.;]?/gi, " ")
+      .replace(/\b(cut for|take your|model is|model wears|model wearing|fits true|dry clean|hand wash|machine wash|imported|made in|low stock|available|sold out|final sale|sale price|regular price)\b[^.;]*[.;]?/gi, " ")
+      .replace(/\b\d+(?:\.\d+)?\s*(?:\"|inches|inch|cm|mm|from shoulder|shoulder to hem|long|length|oz|ml)\b/gi, " ")
+      .replace(/\b\d+\s*[-–]\s*\d+\s*weeks?\b/gi, " ")
+      .replace(/\b(?:bfcm|ss\d+|fw\d+|f\/w\d+|s\/s\d+|sale\d+|drop[-\w]*|restock|core restock|no[- ]?returns?|holiday|low stock|match|matc|litt|holid|fina|highs?|noto|trous|tops|bottoms|dresses|bags|reso|dres|hanif|hani|june|mate|oile|purpl|bodys|summe|swimss\d*)\b/gi, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    return s;
+  }
+
+  function hasWord(text, re) { return re.test(text); }
+  function addOnce(out, label) { if (label && out.indexOf(label) < 0) out.push(label); }
+
+  function inferProductForm(source, title, type, tags, description) {
+    var t = String(title || "").toLowerCase();
+    var ty = String(type || "").toLowerCase();
+    var d = visualText(description).toLowerCase();
+    var hay = [t, ty, d].join(" ");
+
+    // Title wins first. Shopify product_type and tags are often too broad or dirty.
+    if (/\b(top handle bag|bag|clutch|trunk|vanity case|lipstick case|tote|satchel|purse)\b/i.test(t)) return /\bclutch\b/i.test(t) ? "clutch bag" : /\btrunk\b/i.test(t) ? "mini trunk bag" : /\bcase\b/i.test(t) ? "case bag" : "structured bag";
+    if (/\b(boots?)\b/i.test(t)) return "boots";
+    if (/\b(sandals?|mules?)\b/i.test(t)) return "sandals";
+    if (/\b(robe|kimono)\b/i.test(t)) return /\bshort\b/i.test(t) ? "short robe" : /\blong\b/i.test(t) ? "long robe" : "robe";
+    if (/\b(blazer dress)\b/i.test(t)) return "blazer dress";
+    if (/\b(gown)\b/i.test(t)) return "gown";
+    if (/\b(maxi dress)\b/i.test(t)) return "maxi dress";
+    if (/\b(mini dress)\b/i.test(t)) return "mini dress";
+    if (/\b(slip dress)\b/i.test(t)) return "slip dress";
+    if (/\b(mesh dress|netted dress|dress)\b/i.test(t)) return /\bmesh\b/i.test(t) ? "mesh dress" : /\bnetted\b/i.test(t) ? "netted dress" : "dress";
+    if (/\b(jumpsuit)\b/i.test(t)) return "jumpsuit";
+    if (/\b(bodysuit)\b/i.test(t)) return "bodysuit";
+    if (/\b(corset top)\b/i.test(t)) return "corset top";
+    if (/\b(cardigan)\b/i.test(t)) return "cardigan";
+    if (/\b(cape)\b/i.test(t)) return "cape";
+    if (/\b(maxi skirt)\b/i.test(t)) return "maxi skirt";
+    if (/\b(mini skirt)\b/i.test(t)) return "mini skirt";
+    if (/\b(skirt)\b/i.test(t)) return "skirt";
+    if (/\b(barrel leg|jeans|pants|trousers?)\b/i.test(t)) return /\bbarrel leg\b/i.test(t) ? "barrel-leg pants" : /\bdenim|jeans\b/i.test(t) ? "denim pants" : "pants";
+    if (/\b(jorts|shorts)\b/i.test(t)) return "shorts";
+    if (/\b(football jersey|jersey)\b/i.test(t)) return "football jersey";
+    if (/\b(one piece swimsuit|one-piece swimsuit)\b/i.test(t)) return "one-piece swimsuit";
+    if (/\b(bikini|swimsuit)\b/i.test(t)) return "swimwear";
+    if (/\b(racer back|racerback)\b/i.test(t)) return "racerback top";
+    if (/\b(t-shirt|tee|shirt|vest|tank|top)\b/i.test(t)) return "top";
+    if (/\b(cap|hat)\b/i.test(t)) return "cap";
+    if (/\b(tie)\b/i.test(t)) return "tie";
+
+    // Product type only fills blanks after title-based form detection.
+    if (/\b(bag|bags|handbag|accessor)/i.test(ty)) return "structured bag";
+    if (/\b(shoe|boots?|sandals?|footwear)/i.test(ty)) return /boot/i.test(hay) ? "boots" : "footwear";
+    if (/\b(dress|gown)/i.test(ty)) return /\bmini\b/i.test(hay) ? "mini dress" : /\bmaxi\b/i.test(hay) ? "maxi dress" : "dress";
+    if (/\b(skirt)/i.test(ty)) return "skirt";
+    if (/\b(pants|trouser|bottom)/i.test(ty)) return "pants";
+    if (/\b(top|shirt|blouse)/i.test(ty)) return "top";
+    if (/\b(swim)/i.test(ty)) return "swimwear";
+
+    if (source.category === "makeup") {
+      if (/\b(lipstick|lip gloss|gloss|lip)\b/i.test(hay)) return "lip product";
+      if (/\b(eyeliner|liner)\b/i.test(hay)) return "eyeliner";
+      if (/\b(palette|blush|bronzer)\b/i.test(hay)) return /\bbronze|bronzer\b/i.test(hay) ? "bronzing palette" : "makeup palette";
+      if (/\b(foundation|concealer|skin tint)\b/i.test(hay)) return "complexion product";
+      return "makeup product";
+    }
+    if (source.category === "skin") return "skin care product";
+    if (source.category === "body") return /\b(fragrance|perfume|eau de parfum|scent)\b/i.test(hay) ? "fragrance" : "body care product";
+    if (source.category === "hair") {
+      if (/\b(gel|edge control)\b/i.test(hay)) return "hair styling gel";
+      if (/\b(leave[- ]?in|conditioner)\b/i.test(hay)) return "leave-in conditioner";
+      if (/\b(mask)\b/i.test(hay)) return "hair mask";
+      return "hair product";
+    }
+    return (CAT_LABEL[source.category] || source.category || "catalog") + " item";
+  }
+
+  function inferPalette(title, description) {
+    var t = String(title || "").toLowerCase();
+    var d = visualText(description).toLowerCase();
+    var hay = [t, d].join(" ");
+
+    // Prefer color language that appears in the product title. Description color is fallback only.
+    if (/\b(black|noir|onyx|ebony|raven)\b/i.test(t)) return "black dark palette";
+    if (/\b(white|ivory|cream)\b/i.test(t)) return "white light palette";
+    if (/\b(beige|nutmeg|camel|nude|coffee|brown|cocoa|chocolate|kava)\b/i.test(t)) return "warm neutral palette";
+    if (/\b(blue|indigo|ocean|denim)\b/i.test(t)) return "blue denim palette";
+    if (/\b(orange|papaya|hibiscus)\b/i.test(t)) return "orange warm palette";
+    if (/\b(yellow|gold)\b/i.test(t)) return "yellow gold bright palette";
+    if (/\b(purple|lilac|eggplant|raspberry|rose|pink|bordeaux|ruby)\b/i.test(t)) return "rose purple palette";
+    if (/\b(green|mint|lime)\b/i.test(t)) return "green citrus palette";
+
+    if (/\b(black|noir|onyx|ebony)\b/i.test(hay)) return "black dark palette";
+    if (/\b(white|ivory|cream)\b/i.test(hay)) return "white light palette";
+    if (/\b(beige|nutmeg|camel|nude|coffee|brown|cocoa|chocolate|kava)\b/i.test(hay)) return "warm neutral palette";
+    if (/\b(blue|indigo|ocean|denim)\b/i.test(hay)) return "blue denim palette";
+    if (/\b(orange|papaya|hibiscus)\b/i.test(hay)) return "orange warm palette";
+    if (/\b(yellow|gold)\b/i.test(hay)) return "yellow gold bright palette";
+    if (/\b(purple|lilac|eggplant|raspberry|rose|pink|bordeaux|ruby)\b/i.test(hay)) return "rose purple palette";
+    if (/\b(green|mint|lime)\b/i.test(hay)) return "green citrus palette";
+    return "catalog color palette";
+  }
+
+  function inferMaterial(title, description) {
+    var hay = [title, visualText(description)].join(" ").toLowerCase();
+    var out = [];
+    if (/\b(vegan leather|leather)\b/i.test(hay)) addOnce(out, "leather surface");
+    if (/\b(denim)\b/i.test(hay)) addOnce(out, "denim texture");
+    if (/\b(cotton)\b/i.test(hay)) addOnce(out, "cotton hand feel");
+    if (/\b(viscose|rayon)\b/i.test(hay)) addOnce(out, "fluid viscose drape");
+    if (/\b(satin|silk)\b/i.test(hay)) addOnce(out, "smooth satin sheen");
+    if (/\b(sheer|mesh|netted|lace)\b/i.test(hay)) addOnce(out, "sheer open texture");
+    if (/\b(knit|ribbed|cardigan)\b/i.test(hay)) addOnce(out, "soft knit texture");
+    if (/\b(brocade|print|printed|gradient|foil|floral|zebra|pattern)\b/i.test(hay)) addOnce(out, "printed visual surface");
+    if (/\b(suede)\b/i.test(hay)) addOnce(out, "suede texture");
+    if (/\b(beaded|bead)\b/i.test(hay)) addOnce(out, "beaded detail");
+    if (/\b(canvas)\b/i.test(hay)) addOnce(out, "canvas structure");
+    if (/\b(gloss|glowy|radiant|luminous)\b/i.test(hay)) addOnce(out, "glossy finish");
+    return out.length ? out.slice(0, 3).join(", ") : "visible fabric and product finish";
+  }
+
+  function inferSilhouette(form, title, description) {
+    var hay = [title, visualText(description)].join(" ").toLowerCase();
+    var base = "catalog-visible product shape";
+
+    if (/bag|clutch|trunk|case/.test(form)) base = "compact structured accessory shape";
+    else if (/boots|sandals|footwear/.test(form)) base = "grounded footwear silhouette";
+    else if (/football jersey/.test(form)) base = "relaxed athletic shirt silhouette";
+    else if (/robe/.test(form)) base = "loose flowing cover-up silhouette";
+    else if (/gown|maxi dress|long robe/.test(form)) base = "long-line full-body silhouette";
+    else if (/mini dress/.test(form)) base = "short fitted dress silhouette";
+    else if (/mesh dress|netted dress|dress|slip dress|blazer dress/.test(form)) base = "full-body dress silhouette";
+    else if (/jumpsuit/.test(form)) base = "one-piece full-body silhouette";
+    else if (/bodysuit/.test(form)) base = "body-skimming base silhouette";
+    else if (/corset top/.test(form)) base = "structured bodice silhouette";
+    else if (/top|cardigan|cape/.test(form)) base = "upper-body separates silhouette";
+    else if (/pants|jeans|trousers|barrel-leg/.test(form)) base = "lower-body trouser silhouette";
+    else if (/skirt/.test(form)) base = "lower-body skirt silhouette";
+    else if (/swim|bikini|one-piece swimsuit/.test(form)) base = "skin-forward swim silhouette";
+    else if (/cap|hat/.test(form)) base = "headwear accent shape";
+    else if (/tie/.test(form)) base = "neckwear accent shape";
+
+    var mods = [];
+    if (/\b(fitted|bodycon|corset|structured|snatched|ruched)\b/i.test(hay)) addOnce(mods, "fitted structure");
+    if (/\b(loose|oversized|relaxed)\b/i.test(hay)) addOnce(mods, "relaxed ease");
+    if (/\b(pleated|pleat|ruffle|draped|wilted sleeve)\b/i.test(hay)) addOnce(mods, "soft sculptural volume");
+    if (/\b(plunge|open back|cut out|laser cut)\b/i.test(hay)) addOnce(mods, "revealing cut");
+    if (/\b(barrel leg|wide leg)\b/i.test(hay)) addOnce(mods, "wide leg volume");
+    if (/\b(cropped|crop)\b/i.test(hay)) addOnce(mods, "cropped proportion");
+    return mods.length ? base + " with " + mods.slice(0, 2).join(" and ") : base;
+  }
+
+  function inferMood(form, palette, material, title, description) {
+    var hay = [title, visualText(description)].join(" ").toLowerCase();
+    var black = /black dark/.test(palette);
+    var bright = /yellow gold|orange warm|green citrus/.test(palette);
+    var warm = /warm neutral/.test(palette);
+    var purple = /rose purple/.test(palette);
+    var blue = /blue denim/.test(palette);
+    var leather = /leather/.test(material);
+    var sheer = /sheer|mesh|netted/.test(material) || /mesh dress|netted dress/.test(form);
+
+    if (black && (leather || /boots|bag/.test(form))) return "sleek sharp mood with polished edge and after-dark confidence";
+    if (black && sheer) return "dark sheer statement mood with dramatic nightlife confidence";
+    if (black && /dress|bodysuit|jumpsuit/.test(form)) return "dark fitted mood with strong presence and controlled drama";
+    if (black) return "dark monochrome mood with clean visual force";
+
+    if (/football jersey/.test(form)) return bright ? "bright sport-casual mood with playful logo energy" : "athletic casual mood with relaxed logo energy";
+    if (/robe/.test(form)) return "soft resort-lounge mood with relaxed movement and vacation ease";
+    if (/swim|bikini|one-piece swimsuit/.test(form)) return "sunlit swim mood with body-forward vacation energy";
+    if (/boots/.test(form)) return leather ? "grounded leather mood with strong outfit finish" : "grounded footwear mood with outfit finish";
+    if (/bag|clutch|trunk|case/.test(form)) return leather ? "polished accessory mood with structured finishing power" : "compact accessory mood with outfit finishing";
+    if (/blazer dress|tie/.test(form)) return "tailored occasion mood with formal styling pressure";
+    if (/corset|bodysuit/.test(form)) return "defined body mood with sculpted fashion pressure";
+
+    if (warm) return "soft earthy mood with resort polish and relaxed elegance";
+    if (purple) return "color-forward mood with expressive fashion presence";
+    if (blue) return "casual denim mood with relaxed everyday styling";
+    if (bright) return "bright expressive mood with playful visual energy";
+    if (/knit/.test(material)) return "soft textured mood with relaxed wearable polish";
+    if (/printed/.test(material)) return "pattern-forward mood with visual movement";
+    return "catalog style mood with visible fashion presence";
+  }
+
+  function inferOccasion(form, palette, mood) {
+    if (/after-dark|nightlife|dark fitted|sleek sharp/.test(mood)) return "night-out styling, statement dressing, and high-presence outfit building";
+    if (/football jersey/.test(form)) return "daytime casual styling, sport dressing, and off-duty outfit building";
+    if (/robe/.test(form)) return "resort layering, vacation dressing, and relaxed lounge presentation";
+    if (/swim|bikini|one-piece swimsuit/.test(form)) return "poolside wear, beach dressing, and vacation presentation";
+    if (/bag|clutch|trunk|case/.test(form)) return "accessory styling, outfit completion, and polished carry";
+    if (/boots|sandals|footwear/.test(form)) return "footwear styling, outfit grounding, and full-look finishing";
+    if (/blazer dress|tie/.test(form)) return "formal styling, tailored dressing, and event presentation";
+    if (/dress|gown|jumpsuit/.test(form)) return "occasion dressing, full-look styling, and visual entrance";
+    if (/top|pants|skirt|cardigan|cape|bodysuit|corset/.test(form)) return "separates styling, outfit layering, and wardrobe composition";
+    return "catalog styling, product selection, and visual presentation";
+  }
+
+  function buildArbiterCandidateText(source, product, title, type, tags, description) {
+    var catLabel = CAT_LABEL[source.category] || source.category || "Catalog";
+    var cleanTitle = cleanCandidateTitle(title) || cleanCandidatePhrase(title, 80) || "Catalog item";
+    var form = inferProductForm(source, cleanTitle, type, [], description);
+    var palette = inferPalette(cleanTitle, description);
+    var material = inferMaterial(cleanTitle, description);
+    var silhouette = inferSilhouette(form, cleanTitle, description);
+    var mood = inferMood(form, palette, material, cleanTitle, description);
+    var occasion = inferOccasion(form, palette, mood);
+
+    return [
+      catLabel + " product.",
+      cleanTitle + ".",
+      titleCaseFirst(form) + ".",
+      palette + ".",
+      material + ".",
+      silhouette + ".",
+      mood + ".",
+      occasion + "."
+    ].join(" ").replace(/\s+/g, " ").trim();
+  }
   function normalizeProduct(source, product) {
     if (!keepProduct(source, product)) return null;
     var title = cleanText(product.title || product.name || "Untitled", 90);
@@ -487,12 +975,7 @@
     if (!title || !images.length) return null;
     var catLabel = CAT_LABEL[source.category] || "";
     var specParts = [vendor, type, price].filter(Boolean);
-    var semantic = [
-      "Real catalog beauty product.", catLabel ? "Category: " + catLabel + "." : "",
-      "Title: " + title + ".", vendor ? "Brand or store: " + vendor + "." : "",
-      type ? "Product type: " + type + "." : "", tags.length ? "Tags: " + tags.join(", ") + "." : "",
-      description ? "Description: " + description : ""
-    ].filter(Boolean).join(" ");
+    var semantic = buildArbiterCandidateText(source, product, title, type, tags, description);
     return {
       name: title, category: source.category, catLabel: catLabel, weight: source.weight,
       img: images[0], images: images, url: productUrl(source, product),
@@ -544,23 +1027,22 @@
     var pics = [];
     items.forEach(function (u) { u.images.forEach(function (src) { pics.push({ src: src, item: u }); }); });
     shuffle(pics);
-    var frag = document.createDocumentFragment();
     var added = 0, seenProd = {};
     for (var i = 0; i < pics.length; i++) {
       if (heroCount >= HERO_MAX || added >= HERO_PER_SOURCE) break;
       var p = pics[i], k = imgKey(p.src);
       if (heroSeen[k] || seenProd[p.item.name]) continue;
       heroSeen[k] = true; seenProd[p.item.name] = true;
-      heroCount++; added++;
       var a = document.createElement("a");
       a.className = "sfig";
       a.href = p.item.url; a.target = "_blank"; a.rel = "noopener noreferrer";
       a.innerHTML =
         '<img loading="eager" decoding="async" referrerpolicy="no-referrer" src="' + escapeHTML(p.src) + '" alt="' + escapeHTML(p.item.name) + '" onload="this.classList.add(\'in\')" onerror="this.closest(\'.sfig\').classList.add(\'dead\')" />' +
         '<span class="tag">' + escapeHTML(p.item.catLabel || p.item.source) + '</span>';
-      frag.appendChild(a);
+      heroPrimaryStacks[heroCount % heroPrimaryStacks.length].appendChild(a);
+      heroCount++; added++;
     }
-    hgridEl.appendChild(frag);
+    syncHeroMirrors();
   }
 
   // progressive: each house streams into the hero the moment it resolves
